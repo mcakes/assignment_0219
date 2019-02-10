@@ -1,6 +1,6 @@
 ## Background
 
-I assume you are familiar with the Black Scholes framework.
+I shall assume you are familiar with the Black Scholes framework and have a general understanding of options. If not, good luck.
 
 For a stock with spot price `S`, consider a call option with strike `K` and maturity `T` and market price `C`. The implied
 volatility `v=v(K, T)` is the number such that `BS(S, K, T, v, r, q)=C` where BS is
@@ -36,7 +36,7 @@ You will write a program that takes, as an input, a discrete set of option price
 
 You may use the programming language of your choice as well as any
 'non-financial' packages. That is, you are free to use any third party
-optimization, statistics or linear algebra libraries, but you should implement your own functions such as Black Scholes or Forward calculations. Feel free to email (matthew.chivers@rbccm.com) with any questions. Additionally may use any resources you wish (books, websites), but please only seek resources to help understand concepts. For example, you may peruse material describing put/call parity, but don’t search for ‘how to calculate implied rate and dividend yield from chain of option prices'.
+optimization, statistics or linear algebra libraries, but you should implement your own functions such as Black Scholes or Forward calculations. Feel free to email (matthew.chivers@rbccm.com) with any questions. Additionally may use any resources you wish (books, websites), but please only seek resources to help understand concepts. For example, you may reference material describing put/call parity, but please don’t search for ‘how to calculate implied rate and dividend yield from chain of option prices'.
 
 The comma delimited input file quotedata.dat <sup>[1](#datasource)</sup> shown below requires some explanation
 
@@ -53,13 +53,15 @@ The comma delimited input file quotedata.dat <sup>[1](#datasource)</sup> shown b
     12/20/2019,SPX191220C01925000,791.4,794.9,1925.0,SPX191220P01925000,16.1,16.9
 
 The first row lists the underlying equity index and spot price. The second row provides the
-date and time at which the quotes occur and each remaining row contains data pertaining to
-a *line*, that is, a put and call of the same strike and same maturity.
+date and time at which the quotes occur and each remaining rows contains data pertaining to
+each *line*, that is, a put and call of the same strike and same maturity. Each line contains
+an expiration date, a strike, a call ticker, a call bid price, a call ask price, a put ticker,
+a put bid price and a put ask price.
 
 ### Step 1
 Calculate a midmarket implied volatility for each strike.
 
-Given that you have Bid and Ask prices (and hence Mid prices) for puts and calls  for each strike, and you know that with each option price we can find an implied volatility associated with it, you should be able to compute both put and call implied volatilities for each strike. Now, there should only be one implied volatility for each strike, and the put and call vols you find should be similar, but they may not be exact <sup>[5](#pcparity)</sup>. You should choose to combine the put and call implied volatilities somehow to come up with a single implied volatility for each strike. I will leave the choice to you, but do give it some thought and provide justification. Note that deeply in-the-money options tend to be illiquid. Common approaches include equal weighting of put and calls, always using Out of the Money (OTM) options <sup>[3](#otmdef)</sup>, weighting by moneyness (weighted average such that the more OTM an option is, the more weight it is given).
+Given that you have bid and ask prices (and hence mid prices) for puts and calls  for each strike, and you know that with each option price you can find an implied volatility associated with it, you should be able to compute both put and call implied volatilities for each strike. Now, there should only be one implied volatility for each strike, and the put and call vols you find should be similar, but they may not be exact <sup>[5](#pcparity)</sup>. You should choose to combine the put and call implied volatilities somehow to come up with a single implied volatility for each strike. I will leave the choice to you, but do give it some thought and provide justification. Note that deeply in-the-money options tend to be illiquid. Common approaches include equal weighting of put and calls, always using Out of the Money (OTM) options <sup>[3](#otmdef)</sup>, weighting by moneyness (weighted average such that the more OTM an option is, the more weight it is given).
 
 The astute reader may have already noticed one problem - I haven't given you `r` and `q`, which you should need to use the Black Scholes formula. In fact, you can (and should) extract these quantities as market implied parameters. Recall put/call parity which states `C(S, K, T)-P(S, K, T)=exp(-rT)*(F-K)` and `F` is given by `F=S*exp((r-q)*T)` - this identity should be enough to help you estimate `r` and `q`. If you get stuck, you may simply assume `r=0.0200` and proceed to find `q`
 
@@ -81,7 +83,10 @@ to come up with a midmarket price for the 20 Dec 2019 2707.88 (at-the-money) cal
 ### Bonus
 
 If you have extra time and want an additional challenge, use your SVI volatility curve to price
-the 20 December 2019 variance swap. You can learn about variance swaps [here](gs-volatility_swaps.pdf)
+the 20 December 2019 variance swap. You can learn about variance swaps [here](gs-volatility_swaps.pdf).
+Additionally, the [VIX Whitepaper](https://www.cboe.com/micro/vix/vixwhite.pdf) may be a useful resource
+ - the VIX is computed as a 30 day variance swap.
+
 
 ## Sample Solution
 See solution.py
@@ -90,7 +95,7 @@ See solution.py
 ## Footnotes
 
 <a name="datasource">1</a>: Modified output from http://www.cboe.com/delayedquote/quote-table-download
-
+<!--
 <a name="optmnthcode">2</a>: If you're curious, the symbol in brackets is given by ROOTyyddXkkkk where ROOT is a symbol denoting the underlying, yy denotes the year of expiry, dd denotes the day of expiry, X is a letter code denoting the month of expiry and whether the option is a put or call, and kkkk denotes the strike. The following table describes the letter code mapping
 
 | Month | Call | Put |
@@ -106,7 +111,7 @@ See solution.py
 | Sept  | I    | U   |
 | Oct   | J    | V   |
 | Nov   | K    | W   |
-| Dec   | L    | X   |
+| Dec   | L    | X   | -->
 
 
 <a name="otmdef">3</a>: OTM options are puts for `K < F` and calls for `K > F`. Sometimes you will see `F` replaced with `S`.
