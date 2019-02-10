@@ -63,7 +63,7 @@ Calculate a midmarket implied volatility for each strike.
 
 Given that you have bid and ask prices (and hence mid prices) for puts and calls  for each strike, and you know that with each option price you can find an implied volatility associated with it, you should be able to compute both put and call implied volatilities for each strike. Now, there should only be one implied volatility for each strike, and the put and call vols you find should be similar, but they may not be exact <sup>[5](#pcparity)</sup>. You should choose to combine the put and call implied volatilities somehow to come up with a single implied volatility for each strike. I will leave the choice to you, but do give it some thought and provide justification. Note that deeply in-the-money options tend to be illiquid. Common approaches include equal weighting of put and calls, always using Out of the Money (OTM) options <sup>[3](#otmdef)</sup>, weighting by moneyness (weighted average such that the more OTM an option is, the more weight it is given).
 
-The astute reader may have already noticed one problem - I haven't given you `r` and `q`, which you should need to use the Black Scholes formula. In fact, you can (and should) extract these quantities as market implied parameters. Recall put/call parity which states `C(S, K, T)-P(S, K, T)=exp(-rT)*(F-K)` and `F` is given by `F=S*exp((r-q)*T)` - this identity should be enough to help you estimate `r` and `q`. If you get stuck, you may simply assume `r=0.0200` and proceed to find `q`
+The astute reader may have already noticed one problem - I haven't given you `r` and `q`, which you should need to use the Black Scholes formula. In fact, you can (and should) extract these quantities as market implied parameters. Recall put/call parity which states `C(S, K, T)-P(S, K, T)=exp(-rT)*(F-K)` and `F` is given by `F=S*exp((r-q)*T)` - this identity should be enough to help you estimate `r` and `q`. If you get stuck, you may simply assume `r=0.0270` and proceed to find `q`
 
 
 ### Step 2
@@ -71,7 +71,7 @@ The astute reader may have already noticed one problem - I haven't given you `r`
 Calibrate the SVI parameters `P={a, b, p, m, s}` to best fit the midmarket volatilities found in Step 1.
 
 This can be accomplished as a simple least squares optimization: `P'=argmin_P sum_K((MidVol(K)-SVIVol(K, P))^2)`. One may also wish to do some sort of weighted least squares optimization. Common approaches include weighting by the vega of the strike (which gives more weight to at-the-money options), or inversely proportional to volatility bid/ask spread.
-Compare the vols arising form your parametric fit to the mid vols you were fitting. What is the RMSE (root mean square error)? The MAE (mean absolute error)?
+Compare the vols arising form your parametric fit to the mid vols you were fitting. What is the RMSE (root mean square error)? The MAE (mean absolute error)? If possible, provide a visual comparision.
 
 
 ### Step 3
@@ -85,7 +85,7 @@ to come up with a midmarket price for the 20 Dec 2019 2707.88 (at-the-money) cal
 If you have extra time and want an additional challenge, use your SVI volatility curve to price
 the 20 December 2019 variance swap. You can learn about variance swaps [here](gs-volatility_swaps.pdf).
 Additionally, the [VIX Whitepaper](https://www.cboe.com/micro/vix/vixwhite.pdf) may be a useful resource
- - the VIX is computed as a 30 day variance swap.
+(note thatthe VIX is computed as a 30 day variance swap).
 
 
 ## Sample Solution
