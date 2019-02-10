@@ -40,18 +40,21 @@ optimization, statistics or linear algebra libraries, but you should implement y
 
 The comma delimited input file quotedata.dat <sup>[1](#datasource)</sup> shown below requires some explanation
 
-    SPX (S&P 500 INDEX),2684.79,+2.17,
-    Dec 28 2017 @ 11:12 ET,
-    Calls,Last Sale,Net,Bid,Ask,Vol,Open Int,Puts,Last Sale,Net,Bid,Ask,Vol,Open Int,
-    18 Dec 100.00 (SPX1821L100),2552.2,0.0,2535.4,2547.9,0,2673,18 Dec 100.00 (SPX1821X100),0.05,0.0,0.0,0.05,0,10911,
-    18 Dec 200.00 (SPX1821L200),2400.0,0.0,2437.5,2449.8,0,2502,18 Dec 200.00 (SPX1821X200),0.15,0.0,0.0,0.05,0,3482,
-    18 Dec 250.00 (SPX1821L250),0.0,0.0,2388.5,2400.8,0,0,18 Dec 250.00 (SPX1821X250),0.2,0.0,0.0,0.05,0,80,
-    18 Dec 300.00 (SPX1821L300),1499.0,0.0,2339.5,2351.7,0,2,18 Dec 300.00 (SPX1821X300),0.05,0.0,0.0,0.05,0,81,
-    18 Dec 400.00 (SPX1821L400),2130.2,0.0,2242.5,2254.5,0,102,18 Dec 400.00 (SPX1821X400),0.1,0.0,0.05,0.2,0,781,
+    ^SPX (Standard & Poors 500 Index),2707.88,0.0001
+    Feb 08 2019 @ 17:45 ET,Bid,2671.06,Ask,2729.02,Size,1x1,Vol,
+    Expiration Date,Calls,CBid,CAsk,Strike,Puts,PBid,PAsk
+    12/20/2019,SPX191220C01750000,955.0,958.7,1750.0,SPX191220P01750000,8.9,9.5
+    12/20/2019,SPX191220C01775000,931.4,935.1,1775.0,SPX191220P01775000,9.7,10.3
+    12/20/2019,SPX191220C01800000,907.9,911.5,1800.0,SPX191220P01800000,10.6,11.2
+    12/20/2019,SPX191220C01825000,884.5,888.1,1825.0,SPX191220P01825000,11.5,12.2
+    12/20/2019,SPX191220C01850000,861.1,864.7,1850.0,SPX191220P01850000,12.5,13.2
+    12/20/2019,SPX191220C01875000,837.8,841.3,1875.0,SPX191220P01875000,13.6,14.3
+    12/20/2019,SPX191220C01900000,814.5,818.1,1900.0,SPX191220P01900000,14.8,15.5
+    12/20/2019,SPX191220C01925000,791.4,794.9,1925.0,SPX191220P01925000,16.1,16.9
 
-Each row consists of the data pertaining to one strike. The first 7 columns refer to the call option at that strike and the next 7 columns refer to the put option at that strike.
-The first of the 7 columns describes that maturity and strike. Here the
-maturity is always December 21, 2018 (as well, please note 'today' is Dec 28 2017, as specified in the input file). <sup>[2](#optmnthcode)</sup>
+The first row lists the underlying equity index and spot price. The second row provides the
+date and time at which the quotes occur and each remaining row contains data pertaining to
+a *line*, that is, a put and call of the same strike and same maturity.
 
 ### Step 1
 Calculate a midmarket implied volatility for each strike.
@@ -72,13 +75,13 @@ Compare the vols arising form your parametric fit to the mid vols you were fitti
 ### Step 3
 
 Using the parameters from Step 2, you can now compute an implied volatility for any strike. Use this
-to come up with a midmarket price for the 21 Dec 2018 2684.79 call. What would your two way market on this option be? That is, quote a bid and ask at which you would be willing to transact.
+to come up with a midmarket price for the 20 Dec 2019 2707.88 (at-the-money) call. What would your two way market on this option be? That is, quote a bid and ask at which you would be willing to transact.
 
 
 ### Bonus
 
 If you have extra time and want an additional challenge, use your SVI volatility curve to price
-the 21 December 2018 variance swap. You can learn about variance swaps here: http://www.emanuelderman.com/media/gs-volatility_swaps.pdf
+the 20 December 2019 variance swap. You can learn about variance swaps [here](gs-volatility_swaps.pdf)
 
 ## Sample Solution
 See solution.py
@@ -106,8 +109,9 @@ See solution.py
 | Dec   | L    | X   |
 
 
-<a name="otmdef">3</a>: OTM options are puts for `K < S` or `K < F` and calls for `K > S` or `K < F`. The choice of `S` or `F` varies, as does the choice for `K=S` or `K=F`.
+<a name="otmdef">3</a>: OTM options are puts for `K < F` and calls for `K > F`. Sometimes you will see `F` replaced with `S`.
 
-<a name="moneynessdef">4</a>: Other common definitions of moneyness include `x=ln(K/S)`, `x=ln(K/F)`, `x=ln(K/S)/sqrt(T)`, `x=ln(K/F)/sqt(T)`, `d_{+/-}=(ln(F/K)+/-0.5*v^2*T)/(v*sqrt(T))`, and `Delta=N(d1)` where `N` is the normal cdf. Every trader has their favourite.
+<a name="moneynessdef">4</a>: Moneyness gives a sense of 'how far away the option is'. Other common definitions of moneyness include
+`x=K/S`, `x=ln(K/S)`, `x=ln(K/F)`, `x=ln(K/S)/sqrt(T)`, `x=ln(K/F)/sqt(T)`, `d_{+/-}=(ln(F/K)+/-0.5*v^2*T)/(v*sqrt(T))`, and `Delta=N(d1)` where `N` is the normal cdf. Every trader has their favourite.
 
 <a name="pcparity">5</a>: This does not necessarily mean that put call parity doesn't hold, rather the truth of 'Mid' is obscured by the Bid/Ask spread.
