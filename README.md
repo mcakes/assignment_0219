@@ -84,7 +84,7 @@ to come up with a midmarket price for the 20 Dec 2019 2707.88 (at-the-money) cal
 
 Use your SVI volatility curve to price the 20 December 2019 variance swap <sup>[2](#varswap)</sup>. You can learn about variance swaps [here](gs-volatility_swaps.pdf).
 Additionally, the [VIX Whitepaper](https://www.cboe.com/micro/vix/vixwhite.pdf) may be a useful resource
-(note thatthe VIX is computed as a 30 day variance swap).
+(note that the VIX is computed as a 30 day variance swap).
 
 
 <!-- ## Sample Solution
