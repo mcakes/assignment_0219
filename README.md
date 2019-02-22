@@ -66,7 +66,7 @@ Given that you have bid and ask prices (and hence mid prices) for puts and calls
 The astute reader may have already noticed one problem - I haven't given you `r` and `q`, which you should need to use the Black Scholes formula. In fact, you can (and should) extract these quantities as market implied parameters. Recall put/call parity which states `C(S, K, T)-P(S, K, T)=exp(-rT)*(F-K)` and `F` is given by `F=S*exp((r-q)*T)` - this identity should be enough to help you estimate `r` and `q`. If you get stuck, you may simply assume `r=0.0270` and proceed to find `q`
 
 
-### Step 2w
+### Step 2
 
 Calibrate the SVI parameters `P={a, b, p, m, s}` to best fit the midmarket volatilities found in Step 1.
 
@@ -113,10 +113,10 @@ See solution.py -->
 | Dec   | L    | X   | -->
 
 
-<a name="varswap">2</a>: By `price` a varswap, I mean determine the fair strike, in volatility points. That would be `sqrt(K_var)` in the Derman paper, or `\sigma` in the VIX whitepaper.
 
 <a name="otmdef">3</a>: OTM options are puts for `K < F` and calls for `K > F`. Sometimes you will see `F` replaced with `S`.
 
+<a name="varswap">2</a>: By `price` a varswap, I mean determine the fair strike, in volatility points. That would be `sqrt(K_var)` in the Derman paper, or `\sigma` in the VIX whitepaper.
 
 <a name="moneynessdef">4</a>: Moneyness gives a sense of 'how far away the option is'. Other common definitions of moneyness include
 `x=K/S`, `x=ln(K/S)`, `x=ln(K/F)`, `x=ln(K/S)/sqrt(T)`, `x=ln(K/F)/sqt(T)`, `d_{+/-}=(ln(F/K)+/-0.5*v^2*T)/(v*sqrt(T))`, and `Delta=N(d1)` where `N` is the normal cdf. Every trader has their favourite.
